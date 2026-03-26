@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>算法文档整理版</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --primary-soft: #eaf1ff;
+      --accent: #0f766e;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 240px);
+      line-height: 1.7;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    .page {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #0f766e);
+      color: #fff;
+      border-radius: 28px;
+      padding: 44px 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 40px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .hero p {
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.95;
+      max-width: 920px;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .pill {
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.12);
+      border-radius: 999px;
+      font-size: 14px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .toc {
+      padding: 18px;
+    }
+    .toc h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+    .toc a {
+      display: block;
+      padding: 9px 12px;
+      color: var(--text);
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    .toc a:hover {
+      background: #f1f5f9;
+      color: var(--primary);
+    }
+    .summary {
+      padding: 18px;
+      margin-top: 16px;
+    }
+    .summary h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+    .summary ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .module {
+      padding: 26px;
+    }
+    .module-head {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .module h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    .module .lead {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 880px;
+    }
+    .tag {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .section-title {
+      margin: 26px 0 12px;
+      font-size: 18px;
+      color: #0f172a;
+    }
+    .grid-2, .grid-3, .score-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .score-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fff;
+    }
+    .mini-card h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .mini-card p, .mini-card li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .mini-card ul { padding-left: 18px; margin: 8px 0 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f8fafc;
+      font-size: 13px;
+      color: #334155;
+      letter-spacing: 0.02em;
+    }
+    tr:last-child td { border-bottom: none; }
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 0;
+      border-top: 1px dashed var(--line);
+    }
+    .step:first-child { border-top: none; }
+    .step-no {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .step h4 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+    .step p, .step li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .step ul { padding-left: 18px; margin: 8px 0 0; }
+    .highlight {
+      border-left: 4px solid var(--accent);
+      background: #f0fdfa;
+      padding: 16px 18px;
+      border-radius: 14px;
+      color: #115e59;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 18px 0 8px;
+    }
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .grid-2, .grid-3, .score-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .page { padding: 14px; }
+      .hero { padding: 28px 22px; border-radius: 20px; }
+      .hero h1 { font-size: 30px; }
+      .module { padding: 18px; }
+      .module h2 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1>无锡恒新排程算法设计</h1>
+      <p>基于制造业排程场景构建的智能算法体系，围绕资源分配、物料约束与生产节奏优化展开，涵盖多厂分配、库存校验、BOM分析、前段排程、后段排程五大核心模块，实现从订单到生产的全流程智能排程优化。</p>
+    <div class="hero-meta">
+     <span class="pill">共 5 个功能模块</span>
+     <span class="pill">多厂分配 / 库存校验 / BOM分析 / 前段排程 / 后段排程</span>
+     <span class="pill">来源：杭州昊盛人工智能科技有限公司</span>
+    </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="card toc">
+          <h3>目录导航</h3>
+          <a href="#m1">模块一｜多厂订单分配</a>
+          <a href="#m2">模块二｜订单库存匹配</a>
+          <a href="#m3">模块三｜BOM优选 & 原材采购预警</a>
+          <a href="#m4">模块四｜前段排程</a>
+          <a href="#m5">模块五｜后段排程</a>
+        </div>
+        <div class="card summary">
+          <h3>整体流程</h3>
+          <ul>
+            <li>先做多厂分配，确定订单归属工厂与技术可行性。</li>
+            <li>再进行库存匹配，最大化利用现有片材、原卷、分条库存。</li>
+            <li>对新开卷需求执行 BOM 优选与原材预警。</li>
+            <li>随后生成前段延伸 / 涂工月计划。</li>
+            <li>最后做分条 / 裁切并联设备排程与产能均衡。</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="card module" id="m1">
+          <div class="module-head">
+            <div>
+              <h2>模块一：多厂订单分配</h2>
+              <p class="lead">面向无锡与清州两个工厂，对每个订单进行技术可行性判断、产能与交期模拟，并基于多维加权评分选出最优工厂。</p>
+            </div>
+            <span class="tag">目标：选工厂 + 出排程计划</span>
+          </div>
+
+          <h3 class="section-title">输入数据</h3>
+          <table>
+            <thead>
+              <tr><th>数据类型</th><th>字段说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>算法参数数据</td><td>基础时间（排程基准时间）、权重参数：库存匹配 2.0、负载均衡 0.6、材料利用率 0.3、物流成本 0.1</td></tr>
+              <tr><td>订单数据</td><td>订单编码、名称、尺寸（长 / 宽 / 英寸）、位置（上片 / 下片）、需求类型（卷 / 条 / 片）、交付时间、交付数量、优先级、预分配工厂</td></tr>
+              <tr><td>库存数据</td><td>WIP 库存编码、尺寸、库存数量、白边宽度、所在工序位置</td></tr>
+              <tr><td>工序 / 工厂 / 设备数据</td><td>工序编码、加工速度、处理时间、成本；工厂幅宽、白黑边；设备速度、稼动率、产品线限制、当前任务起始时间</td></tr>
+              <tr><td>原卷 / BOM 对照</td><td>原卷类型宽度、订单编码与各工序 WIP 编码的 BOM 关系映射</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">输出数据</h3>
+          <div class="grid-3">
+            <div class="mini-card"><h4>订单分配结果</h4><p>输出目标工厂、各维度得分明细、技术可行性结论。</p></div>
+            <div class="mini-card"><h4>详细评估报告</h4><p>对比两工厂产能负载率、材料利用率、物流成本、库存匹配情况。</p></div>
+            <div class="mini-card"><h4>前段设备模拟排程</h4><p>按设备输出任务开始 / 结束时间、订单号、加工数量。</p></div>
+          </div>
+
+          <h3 class="section-title">核心评分机制</h3>
+          <table>
+            <thead>
+              <tr><th>维度</th><th>权重</th><th>评估内容</th><th>得分规则</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>工艺可行性</td><td>一票否决</td><td>BOM 工艺路线是否完整、原卷宽度是否命中工厂可用幅宽</td><td>不满足直接排除工厂</td></tr>
+              <tr><td>幅宽可用性</td><td>一票否决</td><td>订单幅宽是否在设备加工范围内</td><td>不满足直接排除工厂</td></tr>
+              <tr><td>交期满足</td><td>一票否决</td><td>完整生产周期是否能在交付时间前完成</td><td>不满足直接排除工厂</td></tr>
+              <tr><td>库存匹配</td><td>2.0</td><td>是否存在可用 WIP 库存</td><td>有库存得满分 2.0</td></tr>
+              <tr><td>负载均衡</td><td>0.6</td><td>比较工厂设备当前负载率</td><td>负载更低工厂得 0.6</td></tr>
+              <tr><td>材料利用率</td><td>0.3</td><td>订单在该工厂设备上的利用率</td><td>利用率更高工厂得 0.3</td></tr>
+              <tr><td>物流成本</td><td>0.1</td><td>原材运输 + 成品运输总成本</td><td>总成本更低工厂得 0.1</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">算法设计</h3>
+          <div class="steps">
+            <div class="step"><div class="step-no">1</div><div><h4>多工厂智能分配</h4><p>依次遍历订单，同时评估无锡与清州。先做三项硬约束检查：工艺可行性、幅宽可用性、交期满足；仅全部通过的工厂进入评分阶段，再按总分选择最终工厂。</p></div></div>
+            <div class="step"><div class="step-no">2</div><div><h4>订单优先级管理</h4><p>订单先做预排序：紧急订单优先于普通订单；同优先级内按交付时间升序。客户指定工厂的预分配订单跳过双厂比较，但继续参与后续产能计算和排程。</p></div></div>
+            <div class="step"><div class="step-no">3</div><div><h4>技术可行性检查</h4><p>依据编码对照获取工艺路线，验证工厂幅宽覆盖能力；库存匹配从包装工序向前逐级回溯，分条库存按幅宽利用率择优。</p></div></div>
+            <div class="step"><div class="step-no">4</div><div><h4>产能与交期管理</h4><p>优先选择投产时间最早的设备，并考虑稼动率、设备空档与完整生产周期。完整周期包括前段加工、熟成、运输、后段加工等时间。负载率 = 已安排时间 / 总产能。</p></div></div>
+            <div class="step"><div class="step-no">5</div><div><h4>经济性优化</h4><p>按订单类型分别计算材料利用率：卷订单匹配即 1.0；条订单为订单尺寸 / 设备幅宽；片订单考虑白边后的有效幅宽与排布列数。物流成本综合原材与成品运输成本，其中清州包含长途 + 短途成本。</p></div></div>
+            <div class="step"><div class="step-no">6</div><div><h4>模拟生产排程</h4><p>对前段设备生成时间轴任务表；若有库存，则从库存匹配工序的下道工序开始排程；否则从前段工序起排。整体要协调熟成、运输和后段工序衔接，避免等待与冲突。</p></div></div>
+          </div>
+
+          <div class="highlight">关键特征：该模块本质上是“硬约束过滤 + 多维评分优化 + 时间仿真排程”的组合策略。</div>
+        </section>
+
+        <section class="card module" id="m2">
+          <div class="module-head">
+            <div>
+              <h2>模块二：订单库存匹配</h2>
+              <p class="lead">在 FCST 订单与现有库存之间进行最优匹配，优先消化片库存、原卷库存、分条库存，并为无法消化的订单输出净需求。</p>
+            </div>
+            <span class="tag">目标：优先吃库存，减少新开卷</span>
+          </div>
+
+          <h3 class="section-title">输入数据</h3>
+          <table>
+            <thead><tr><th>数据类型</th><th>字段说明</th></tr></thead>
+            <tbody>
+              <tr><td>算法参数</td><td>利用率权重 0.8、呆滞量权重 0.2、交付权重、订单优先级权重、最小利用率 0.8、最大呆滞量 200 片 / 200 米</td></tr>
+              <tr><td>FCST 订单</td><td>订单品号、尺寸、交付时间、交付数量、裁切方式（仅单切 / 可组合）</td></tr>
+              <tr><td>库存</td><td>片库存、原卷库存、分条卷库存（含品号、尺寸、数量 / 长度、入库时间、mark 号等）</td></tr>
+              <tr><td>对照表</td><td>订单品号对应可用卷料品号集合、原卷最大 / 最小出货米数、原卷熟成时间</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">输出数据</h3>
+          <div class="grid-2">
+            <div class="mini-card"><h4>净需求订单</h4><p>未完成库存匹配、需要新开卷生产的订单清单。</p></div>
+            <div class="mini-card"><h4>片库存分配结果</h4><p>片订单与片库存匹配详情，包含分配数量与批次信息。</p></div>
+            <div class="mini-card"><h4>原卷库存分配结果</h4><p>原卷订单与原卷库存匹配详情，包含分配长度与剩余长度。</p></div>
+            <div class="mini-card"><h4>卷库存裁切结果</h4><p>分别输出单一裁切方案与组合裁切方案的匹配明细。</p></div>
+          </div>
+
+          <h3 class="section-title">算法设计</h3>
+          <div class="steps">
+            <div class="step"><div class="step-no">1</div><div><h4>订单打分</h4><p>根据交付时间剩余小时数计算紧急度，并结合订单优先级系数（优先 1.0、普通 0.8）进行加权求和。评分越高，越优先参与库存匹配。</p></div></div>
+            <div class="step"><div class="step-no">2</div><div><h4>原卷库存匹配</h4><p>硬规则：卷料品号必须在订单可用品号集合内；长度必须同时满足最小与最大出货米数限制；幅宽必须完全一致。优先规则：先入库早、再长度短。</p></div></div>
+            <div class="step"><div class="step-no">3</div><div><h4>片库存匹配</h4><p>硬规则：品号完全一致，mark 号完全一致。优先规则：先入库早、再选择数量更少批次，促进小批量库存周转。</p></div></div>
+            <div class="step"><div class="step-no">4</div><div><h4>分条库存匹配</h4><p>规则与原卷库存基本一致：品号集合匹配、长度满足上下限、幅宽一致；优先同样遵循先进先出与短料优先。</p></div></div>
+            <div class="step"><div class="step-no">5</div><div><h4>卷库存匹配：单切方案</h4><p>先筛选可用卷料，再考虑最大列数排布：片订单最多 5 列、分条最多 3 列。若切完后剩余长度 ≤ 50 米，则优先整卷切完。利用率低于 0.8 或呆滞量超过阈值的方案被淘汰。总分 = 基础得分（利用率 + 呆滞量）+ 库龄加分。</p></div></div>
+            <div class="step"><div class="step-no">6</div><div><h4>卷库存匹配：组合方案</h4><p>只在交期相差不超过 35 天且存在共用卷料的订单中找组合，并仅取前 20 个交期相近订单做组合搜索。总分 = 基础得分 + 库龄得分 + 交期得分，其中交期差越小加分越多，超过一个月则扣分。</p></div></div>
+          </div>
+
+          <h3 class="section-title">关键评分规则</h3>
+          <div class="grid-3">
+            <div class="mini-card"><h4>基础得分</h4><p>利用率 × 0.8 + 呆滞量 × 0.2。</p></div>
+            <div class="mini-card"><h4>库存得分</h4><p>按库龄加分：7 天内 0 分，30 天 +0.05，90 天 +0.1，180 天 +0.15，一年内 +0.2，一年以上 +0.25。</p></div>
+            <div class="mini-card"><h4>组合交期得分</h4><p>交期差 &lt;1 天 +0.3；&lt;3 天 +0.1；&lt;7 天 +0.05；大于 1 个月 -0.2。</p></div>
+          </div>
+        </section>
+
+        <section class="card module" id="m3">
+          <div class="module-head">
+            <div>
+              <h2>模块三：BOM 优选 & 原材料采购预警</h2>
+              <p class="lead">围绕原卷段、PVA 批次与 BOM 之间的匹配关系，优选最合适的 BOM，并对原材料短缺与安全库存不足进行预警和采购建议生成。</p>
+            </div>
+            <span class="tag">目标：选 BOM + 做缺料预警</span>
+          </div>
+
+          <h3 class="section-title">输入数据</h3>
+          <table>
+            <thead><tr><th>数据类型</th><th>字段说明</th></tr></thead>
+            <tbody>
+              <tr><td>BOM 数据</td><td>BOM 编码、名称、原材料清单、消耗率、损耗率</td></tr>
+              <tr><td>原材料数据</td><td>库存、安全库存、在途数量、最近到货时间、最大存储时间、最小 / 最大订货批量</td></tr>
+              <tr><td>原卷段数据</td><td>原卷段编码、原卷编码、PVA 编码、PVA 批次、使用米数、关联订单、最早投产时间</td></tr>
+              <tr><td>对照表</td><td>订单与 BOM 关系、PVA 与原卷关系</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">输出数据</h3>
+          <div class="grid-3">
+            <div class="mini-card"><h4>原卷-BOM 分配结果</h4><p>含 PVA 编码 / 批次、原卷段使用米数、BOM 信息、原材料需求、计划投产时间。</p></div>
+            <div class="mini-card"><h4>安全库存预警</h4><p>输出低于安全库存的物料、短缺数量与单位。</p></div>
+            <div class="mini-card"><h4>采购建议单</h4><p>给出采购批次、采购量、建议采购时间及对应投产时间。</p></div>
+          </div>
+
+          <h3 class="section-title">算法设计</h3>
+          <div class="steps">
+            <div class="step"><div class="step-no">1</div><div><h4>PVA 分组与排序</h4><p>先按 PVA 编码与批次分组，再按关联订单最早投产时间升序排列，保证同批 PVA 连续处理，减少切换次数。</p></div></div>
+            <div class="step"><div class="step-no">2</div><div><h4>核心原卷段确定</h4><p>优先选择既有 BOM 配置、又能满足原材库存需求的原卷段作为组内核心；若都不满足，则选择组内首个原卷段。</p></div></div>
+            <div class="step"><div class="step-no">3</div><div><h4>BOM 等级划分</h4><p>BOM 名称格式形如“涂工编码-数字/延伸编码-数字”。末尾两段都为数字则等级 1；仅一段为数字则等级 2；都不是数字则等级 3。等级 1 优先级最高。</p></div></div>
+            <div class="step"><div class="step-no">4</div><div><h4>BOM 选择策略</h4><p>按等级从高到低检查，同等级优先选“所有原材料都满足需求”的 BOM；若有多个，再选包含最长存储时间物料的 BOM；若都不满足库存，则也优先最长存储时间物料。</p></div></div>
+            <div class="step"><div class="step-no">5</div><div><h4>BOM 相似度匹配</h4><p>组内其他原卷段按与核心 BOM 的 Jaccard 相似度（交集 / 并集）择优。若相似度相同，则优先能满足生产需求的 BOM，再比较最长存储时间物料。</p></div></div>
+            <div class="step"><div class="step-no">6</div><div><h4>原材料预警与采购建议</h4><p>需求量 = 原卷米数 × 消耗率 ÷ (1 - 损耗率)。若在途物料能在投产前到达，则计入可用库存；否则不计。短缺部分触发生产短缺预警；分配后剩余库存低于安全库存时触发安全库存预警，并按最小 / 最大订货批量生成采购建议。</p></div></div>
+          </div>
+
+          <div class="highlight">核心思想：先保证同批 PVA 连续生产，再在“标准化程度、库存可满足性、原材存储时效性”之间做 BOM 最优平衡。</div>
+        </section>
+
+        <section class="card module" id="m4">
+          <div class="module-head">
+            <div>
+              <h2>模块四：前段排程</h2>
+              <p class="lead">针对净需求订单与新开卷生产，完成卷料分配、PVA 批次分配，并形成延伸 / 涂工月计划与交期达成率报告。</p>
+            </div>
+            <span class="tag">目标：前段月计划与延期识别</span>
+          </div>
+
+          <h3 class="section-title">输入数据</h3>
+          <table>
+            <thead><tr><th>数据类型</th><th>字段说明</th></tr></thead>
+            <tbody>
+              <tr><td>算法参数</td><td>利用率权重、呆滞量权重、交付权重、订单优先级权重、最小利用率、最大呆滞量</td></tr>
+              <tr><td>净需求订单</td><td>来自模块二，包含品号、尺寸、交付时间、交付数量</td></tr>
+              <tr><td>PVA / 虚拟卷</td><td>PVA 品号、宽度、消耗率、损失米数；虚拟卷品号、白边、黑边、胶水料号</td></tr>
+              <tr><td>对照与工序</td><td>订单可用原卷集合、原卷可用 PVA 集合、熟成时间、设备速度及换型时间（换幅宽 12h / 换 PVA 2h / 换胶水 1h）</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">输出数据</h3>
+          <div class="grid-2">
+            <div class="mini-card"><h4>虚拟卷分配结果</h4><p>订单分配到的卷料及对应 PVA 品号、批次。</p></div>
+            <div class="mini-card"><h4>延伸涂工月计划</h4><p>每日生产原卷与 PVA 信息，以及每卷开始 / 结束时间。</p></div>
+            <div class="mini-card"><h4>交期达成率报告</h4><p>统计交期达成率，并列出延期订单及原因。</p></div>
+            <div class="mini-card"><h4>未处理订单</h4><p>展示无法排程的订单及原因，如产能不足、物料短缺等。</p></div>
+          </div>
+
+          <h3 class="section-title">算法设计</h3>
+          <div class="steps">
+            <div class="step"><div class="step-no">1</div><div><h4>订单卷料分配</h4><p>复用模块二中的原卷、分片、分条匹配逻辑，对订单分配最优卷料；若库存不足则触发新开卷。</p></div></div>
+            <div class="step"><div class="step-no">2</div><div><h4>卷料 PVA 分配</h4><p>卷料按宽度优先匹配对应 PVA（仅支持 1960mm / 2260mm）；优先选择剩余长度最少的批次，并尽量整批用完；若单一批次不足，则允许多批次组合，且按分配比例拆分订单数据。</p></div></div>
+            <div class="step"><div class="step-no">3</div><div><h4>倒排最晚前段生产时间</h4><p>依据订单类型（原卷 / 分条 / 分片）及后段加工速度，扣减熟成时间与后续加工时间，倒推卷料最晚需要在前段完成的时间；若同卷组合多个订单，则取更紧的时间约束。</p></div></div>
+            <div class="step"><div class="step-no">4</div><div><h4>延伸设备月计划</h4><p>先按 1960 / 2260 幅宽组计算紧急程度，再在组内按 PVA 品号、PVA 批次、胶水品号排序，减少换型。排程时计入换幅宽 12h、换 PVA 2h、换胶水 1h，并采用逐卷顺排生成精确开始 / 结束时间。</p></div></div>
+            <div class="step"><div class="step-no">5</div><div><h4>涂工设备月计划</h4><p>遵循延伸设备的加工顺序。每卷开始时间取“设备空闲时间”和“前序工序完工时间”的较大值，生产时间按涂工设备实际速度重新计算，结束时间回写给订单供后续工序使用。</p></div></div>
+          </div>
+        </section>
+
+        <section class="card module" id="m5">
+          <div class="module-head">
+            <div>
+              <h2>模块五：后段排程（分条 / 裁切）</h2>
+              <p class="lead">针对切条与切片两类并联设备，在兼顾少换型与负载均衡的前提下，为卷料自动选择加工设备和执行顺序。</p>
+            </div>
+            <span class="tag">目标：并联设备智能排程</span>
+          </div>
+
+          <h3 class="section-title">输入数据</h3>
+          <table>
+            <thead><tr><th>数据类型</th><th>字段说明</th></tr></thead>
+            <tbody>
+              <tr><td>前段卷料结果</td><td>订单编号、卷料代码、列数、利用率、呆滞量、片数、使用长度、利用率评分</td></tr>
+              <tr><td>设备状态</td><td>设备编码、设备类型、生产速度、最后订单结束时间、最后订单信息</td></tr>
+              <tr><td>设备配置</td><td>可加工产品类型限制、设备启用状态、所属工序</td></tr>
+              <tr><td>订单数据</td><td>卷料编号、幅宽、订单类型、列数、分组信息、总长度、交付时间</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">输出数据</h3>
+          <div class="grid-2">
+            <div class="mini-card"><h4>切条排程结果</h4><p>包含卷号、开始 / 结束生产时间、分配设备序号。</p></div>
+            <div class="mini-card"><h4>切片排程结果</h4><p>包含卷号、开始 / 结束生产时间、分配设备序号。</p></div>
+            <div class="mini-card"><h4>设备产能分布</h4><p>统计各设备任务分布与负载率。</p></div>
+            <div class="mini-card"><h4>甘特图数据</h4><p>支持按设备与时间维度做可视化展示。</p></div>
+          </div>
+
+          <h3 class="section-title">多级并联设备少换型排程算法</h3>
+          <table>
+            <thead><tr><th>评分类型</th><th>说明</th><th>权重 / 规则</th></tr></thead>
+            <tbody>
+              <tr><td>匹配度打分</td><td>比较待排卷料与设备最近完成订单在 4 个字段上的一致性：幅宽、订单类型、列数、分组信息</td><td>字段权重分别为 4 / 4 / 1 / 1，满分 10 分</td></tr>
+              <tr><td>产能均衡打分</td><td>根据待排卷料计划开始时间与各设备最后结束时间的差值计算，差值越大表示设备越空闲</td><td>线性插值后映射到 0-10 分</td></tr>
+              <tr><td>综合得分</td><td>同时兼顾少换型与负载均衡</td><td>综合得分 = 匹配度 × 6 + 产能均衡 × 4</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="section-title">已实现能力</h3>
+          <div class="grid-3">
+            <div class="mini-card"><h4>经典排程</h4><p>支持将一组订单自动排到 N 台并联设备上。</p></div>
+            <div class="mini-card"><h4>减少换型换刀</h4><p>将同幅宽、同类型、同列数、同分组的订单尽量连续安排到同设备。</p></div>
+            <div class="mini-card"><h4>负载均衡</h4><p>优先分配给更空闲、结束时间更早的设备。</p></div>
+            <div class="mini-card"><h4>设备禁用</h4><p>可按产品行号或机型限制屏蔽不可排程设备。</p></div>
+          </div>
+
+          <h3 class="section-title">未来扩展方向</h3>
+          <div class="grid-3">
+            <div class="mini-card"><h4>插单功能</h4><p>支持紧急订单插排，建议结合手工调整或独立插单界面。</p></div>
+            <div class="mini-card"><h4>dr_op 避让</h4><p>支持维护窗口或禁排时间段的自动避让。</p></div>
+            <div class="mini-card"><h4>切条辊子选型</h4><p>结合订单幅宽与材料特性自动推荐辊子型号。</p></div>
+            <div class="mini-card"><h4>包装问题处理</h4><p>将包装能力纳入后段排程，避免库存积压。</p></div>
+            <div class="mini-card"><h4>研磨问题处理</h4><p>进一步扩展至研磨工序排程，形成全流程闭环。</p></div>
+            <div class="mini-card"><h4>外包厂排程</h4><p>支持外包订单分配、跟踪与协同。</p></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer">来源：杭州昊盛人工智能科技有限公司</div>
+  </div>
+</body>
+</html>
